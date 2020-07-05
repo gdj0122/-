@@ -17,7 +17,7 @@
 						<image src="../../static/image/sign/ok.png" class="ok" mode="" v-if="isuser"></image>
 					</view>
 					<view class="inputs-div">
-						<input type="text" placeholder="邮箱" placeholder-style="color:#aaa;font-weight:400" class="email"/>
+						<input type="text" placeholder="邮箱" placeholder-style="color:#aaa;font-weight:400" class="email" @blur="isEmail"/>
 						<view class="employ" v-if="employ">已占用</view>
 						<view class="invalid" v-if="invalid">邮箱无效</view>
 						<image src="../../static/image/sign/ok.png" class="ok" mode="" v-if='isemail'></image>
@@ -25,7 +25,7 @@
 					<view class="inputs-div">
 						<input :type="type" placeholder="密码" placeholder-style="color:#aaa;font-weight:400" class="psw"/>
 						<view class="employ" v-if="employ">已占用</view>
-						<image src="../../static/image/sign/查看@2x.png" mode="" class="look" @tap="looks"></image>
+						<image :src="lookUrl" mode="" class="look" @tap="looks"></image>
 					</view>
 				</view>
 			</view>
@@ -42,18 +42,34 @@
 				isemail:false,
 				look:true,
 				invalid:false,
-				employ:false
+				employ:false,
+				lookUrl:'../../static/image/sign/biyan.png',
+				email:null
 			}
 		},
 		methods: {
 			looks (){
 				if (this.look==true) {
 					this.type='text'
+					this.lookUrl='../../static/image/sign/查看@2x.png'
 				}else{
 					this.type='password'
+					this.lookUrl='../../static/image/sign/biyan.png'
 				}
 					this.look = !this.look
 				console.log(this.look)
+			},
+			// 判斷郵箱
+			isEmail(e){
+				this.email = e.detail.value
+				let reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+				if(this.email.length>0){
+					if(reg.test(this.email)){
+						this.invalid=false
+					}else{
+						this.invalid=true
+					}
+				}
 			}
 		}
 	}
